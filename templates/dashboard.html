@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title_suffix %} — Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block page_subtitle %}Resumen general del sistema{% endblock %}
+
+{% block content %}
+<div class="welcome-card">
+    <h2>Hola, <span>{{ session['usuario'] }}</span> 👋</h2>
+    <p>Este es tu panel de control. Gestiona clientes, productos y pedidos desde aquí.</p>
+</div>
+
+<div class="stats-grid">
+    <a href="{{ url_for('clientes') }}" class="stat-card" style="text-decoration:none;">
+        <div class="stat-icon indigo">👥</div>
+        <div>
+            <div class="stat-value">{{ stats.clientes }}</div>
+            <div class="stat-label">Clientes registrados</div>
+        </div>
+    </a>
+    <a href="{{ url_for('productos') }}" class="stat-card" style="text-decoration:none;">
+        <div class="stat-icon orange">📦</div>
+        <div>
+            <div class="stat-value">{{ stats.productos }}</div>
+            <div class="stat-label">Productos en catálogo</div>
+        </div>
+    </a>
+    <a href="{{ url_for('pedidos') }}" class="stat-card" style="text-decoration:none;">
+        <div class="stat-icon green">🛒</div>
+        <div>
+            <div class="stat-value">{{ stats.pedidos }}</div>
+            <div class="stat-label">Pedidos realizados</div>
+        </div>
+    </a>
+</div>
+
+<div class="panel">
+    <div class="panel-header">
+        <span class="panel-title">Accesos rápidos</span>
+    </div>
+    <div style="padding: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+        <a href="{{ url_for('nuevo_cliente') }}" class="btn btn-primary">➕ Nuevo cliente</a>
+        <a href="{{ url_for('nuevo_producto') }}" class="btn btn-orange">➕ Nuevo producto</a>
+        <a href="{{ url_for('nuevo_pedido') }}" class="btn btn-ghost">➕ Nuevo pedido</a>
+    </div>
+</div>
+{% endblock %}

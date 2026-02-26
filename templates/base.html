@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>León | microsaas{% block title_suffix %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="León microsaas" class="sidebar-logo"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+            <div style="display:none; color:white; font-family:'Fraunces',serif; font-size:1.1rem;">
+                León <span style="color:#fb923c">| microsaas</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">General</div>
+            <a href="{{ url_for('dashboard') }}" class="nav-item {% if active=='dashboard' %}active{% endif %}">
+                <span class="nav-icon">🏠</span> Dashboard
+            </a>
+            <div class="nav-section-label">Entidades</div>
+            <a href="{{ url_for('clientes') }}" class="nav-item {% if active=='clientes' %}active{% endif %}">
+                <span class="nav-icon">👥</span> Clientes
+            </a>
+            <a href="{{ url_for('productos') }}" class="nav-item {% if active=='productos' %}active{% endif %}">
+                <span class="nav-icon">📦</span> Productos
+            </a>
+            <a href="{{ url_for('pedidos') }}" class="nav-item {% if active=='pedidos' %}active{% endif %}">
+                <span class="nav-icon">🛒</span> Pedidos
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="sidebar-user">
+                <div class="sidebar-user-avatar">{{ session['usuario'][0].upper() }}</div>
+                <div>
+                    <div class="sidebar-user-name">{{ session['usuario'] }}</div>
+                    <div class="sidebar-user-role">Administrador</div>
+                </div>
+            </div>
+            <a href="{{ url_for('logout') }}" class="nav-item" style="color:rgba(255,255,255,.55);">
+                <span class="nav-icon">🚪</span> Cerrar sesión
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+        <header class="topbar">
+            <div>
+                <div class="topbar-title">{% block page_title %}Dashboard{% endblock %}</div>
+                <div class="topbar-subtitle">{% block page_subtitle %}León | microsaas{% endblock %}</div>
+            </div>
+            {% block topbar_actions %}{% endblock %}
+        </header>
+        <div class="page-content">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+</div>
+</body>
+</html>

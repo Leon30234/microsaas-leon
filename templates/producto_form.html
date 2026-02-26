@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title_suffix %} — {{ 'Editar' if producto else 'Nuevo' }} Producto{% endblock %}
+{% block page_title %}{{ 'Editar' if producto else 'Nuevo' }} Producto{% endblock %}
+{% block page_subtitle %}Productos{% endblock %}
+
+{% block content %}
+<div class="form-card">
+    <h2>{{ '✏️ Editar producto' if producto else '➕ Nuevo producto' }}</h2>
+    <form method="POST">
+        <div class="form-group">
+            <label>Nombre *</label>
+            <input type="text" name="nombre" value="{{ producto.nombre if producto else '' }}" required placeholder="Nombre del producto">
+        </div>
+        <div class="form-group">
+            <label>Descripción</label>
+            <textarea name="descripcion" placeholder="Descripción del producto...">{{ producto.descripcion if producto else '' }}</textarea>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Precio (€) *</label>
+                <input type="number" name="precio" step="0.01" min="0" value="{{ producto.precio if producto else '0.00' }}" required placeholder="0.00">
+            </div>
+            <div class="form-group">
+                <label>Stock *</label>
+                <input type="number" name="stock" min="0" value="{{ producto.stock if producto else '0' }}" required placeholder="0">
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-orange">💾 Guardar producto</button>
+            <a href="{{ url_for('productos') }}" class="btn btn-ghost">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

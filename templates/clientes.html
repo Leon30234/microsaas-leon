@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title_suffix %} — Clientes{% endblock %}
+{% block page_title %}Clientes{% endblock %}
+{% block page_subtitle %}{{ clientes|length }} cliente(s) registrado(s){% endblock %}
+
+{% block topbar_actions %}
+<a href="{{ url_for('nuevo_cliente') }}" class="btn btn-primary">➕ Nuevo cliente</a>
+{% endblock %}
+
+{% block content %}
+<div class="panel">
+    <div class="panel-header">
+        <span class="panel-title">Listado de clientes</span>
+        <span class="badge badge-indigo">{{ clientes|length }} total</span>
+    </div>
+    {% if clientes %}
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Dirección</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in clientes %}
+            <tr>
+                <td><span class="badge badge-gray">{{ c.id }}</span></td>
+                <td><strong>{{ c.nombre }}</strong></td>
+                <td>{{ c.email or '—' }}</td>
+                <td>{{ c.telefono or '—' }}</td>
+                <td>{{ c.direccion or '—' }}</td>
+                <td>
+                    <div class="td-actions">
+                        <a href="{{ url_for('editar_cliente', id=c.id) }}" class="btn btn-ghost" style="padding:.4rem .8rem; font-size:.8rem;">✏️ Editar</a>
+                        <a href="{{ url_for('eliminar_cliente', id=c.id) }}" class="btn btn-danger" style="padding:.4rem .8rem; font-size:.8rem;"
+                           onclick="return confirm('¿Eliminar este cliente?')">🗑️ Eliminar</a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon">👥</div>
+        <p>No hay clientes todavía.<br>¡Crea el primero!</p>
+        <a href="{{ url_for('nuevo_cliente') }}" class="btn btn-primary" style="margin-top:1rem;">➕ Nuevo cliente</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

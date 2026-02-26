@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title_suffix %} — Productos{% endblock %}
+{% block page_title %}Productos{% endblock %}
+{% block page_subtitle %}{{ productos|length }} producto(s) en catálogo{% endblock %}
+
+{% block topbar_actions %}
+<a href="{{ url_for('nuevo_producto') }}" class="btn btn-orange">➕ Nuevo producto</a>
+{% endblock %}
+
+{% block content %}
+<div class="panel">
+    <div class="panel-header">
+        <span class="panel-title">Catálogo de productos</span>
+        <span class="badge badge-orange">{{ productos|length }} total</span>
+    </div>
+    {% if productos %}
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in productos %}
+            <tr>
+                <td><span class="badge badge-gray">{{ p.id }}</span></td>
+                <td><strong>{{ p.nombre }}</strong></td>
+                <td>{{ p.descripcion or '—' }}</td>
+                <td><strong style="color:var(--indigo-700)">{{ '%.2f'|format(p.precio) }} €</strong></td>
+                <td>
+                    {% if p.stock > 10 %}
+                        <span class="badge badge-green">{{ p.stock }}</span>
+                    {% elif p.stock > 0 %}
+                        <span class="badge badge-orange">{{ p.stock }}</span>
+                    {% else %}
+                        <span class="badge badge-red">Sin stock</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="td-actions">
+                        <a href="{{ url_for('editar_producto', id=p.id) }}" class="btn btn-ghost" style="padding:.4rem .8rem; font-size:.8rem;">✏️ Editar</a>
+                        <a href="{{ url_for('eliminar_producto', id=p.id) }}" class="btn btn-danger" style="padding:.4rem .8rem; font-size:.8rem;"
+                           onclick="return confirm('¿Eliminar este producto?')">🗑️ Eliminar</a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon">📦</div>
+        <p>No hay productos todavía.<br>¡Añade el primero!</p>
+        <a href="{{ url_for('nuevo_producto') }}" class="btn btn-orange" style="margin-top:1rem;">➕ Nuevo producto</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

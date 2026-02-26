@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title_suffix %} — Pedido #{{ pedido.id }}{% endblock %}
+{% block page_title %}Pedido #{{ pedido.id }}{% endblock %}
+{% block page_subtitle %}Detalle del pedido{% endblock %}
+
+{% block topbar_actions %}
+<div style="display:flex; gap:.75rem;">
+    <a href="{{ url_for('editar_pedido', id=pedido.id) }}" class="btn btn-ghost">✏️ Editar</a>
+    <a href="{{ url_for('pedidos') }}" class="btn btn-primary">← Volver a pedidos</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="detail-grid">
+    <div class="detail-card">
+        <h4>👤 Información del cliente</h4>
+        <div class="detail-row"><span>Nombre</span><span>{{ pedido.cliente_nombre }}</span></div>
+        <div class="detail-row"><span>Email</span><span>{{ pedido.cliente_email or '—' }}</span></div>
+    </div>
+    <div class="detail-card">
+        <h4>📋 Información del pedido</h4>
+        <div class="detail-row"><span>Referencia</span><span>#{{ pedido.id }}</span></div>
+        <div class="detail-row">
+            <span>Estado</span>
+            <span>
+                {% if pedido.estado == 'completado' %}<span class="badge badge-green">✅ Completado</span>
+                {% elif pedido.estado == 'pendiente' %}<span class="badge badge-orange">⏳ Pendiente</span>
+                {% elif pedido.estado == 'cancelado' %}<span class="badge badge-red">❌ Cancelado</span>
+                {% else %}<span class="badge badge-gray">{{ pedido.estado }}</span>{% endif %}
+            </span>
+        </div>
+        <div class="detail-row"><span>Fecha</span><span>{{ pedido.created_at[:10] }}</span></div>
+        {% if pedido.notas %}
+        <div class="detail-row"><span>Notas</span><span style="font-style:italic; color:var(--gray-500)">{{ pedido.notas }}</span></div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-header">
+        <span class="panel-title">📦 Líneas del pedido</span>
+        <span class="badge badge-indigo">{{ lineas|length }} línea(s)</span>
+    </div>
+    {% if lineas %}
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio unit.</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for l in lineas %}
+            <tr>
+                <td><span class="badge badge-gray">{{ loop.index }}</span></td>
+                <td><strong>{{ l.producto_nombre }}</strong></td>
+                <td>{{ l.cantidad }}</td>
+                <td>{{ '%.2f'|format(l.precio_unitario) }} €</td>
+                <td><strong style="color:var(--indigo-700)">{{ '%.2f'|format(l.cantidad * l.precio_unitario) }} €</strong></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="total-row">
+        <span>Total del pedido</span>
+        <span style="font-size:1.3rem; color:var(--orange-600)">{{ '%.2f'|format(total) }} €</span>
+    </div>
+    {% else %}
+    <div class="empty-state"><p>Este pedido no tiene líneas.</p></div>
+    {% endif %}
+</div>
+{% endblock %}
